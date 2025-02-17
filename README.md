@@ -22,7 +22,7 @@
 - Develop search functionality using SQL queries.  
 
 ## 👥 Team Contributions  
-- **Design And Research - Nisha Giri
+- **Design And Research** - Nisha Giri
 - **Frontend (HTML, CSS, JS):** Subhankar  
 - **Backend (Go, MySQL):** Prahlad Gurung  
 
