@@ -28,3 +28,4 @@
 
 ## Current Progress
 - Planning System and UI design
+- Auth implementation
