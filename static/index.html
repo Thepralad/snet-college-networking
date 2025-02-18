@@ -74,19 +74,16 @@
         }
         .textField {
             height: 30px;
+            font-size: 0.9rem;
+            padding-left: 5px;
         }
-        .buttons button{
+        .button{
             background-color: #f3911a;
             color: white;
-            height: 30px;
-            width: 60px;
-        }
-        .buttons button{
-            background-color: #f3911a;
-            color: white;
-            height: 30px;
-            width: 60px;
+            height: 40px;
+            width: 70px;
             cursor: pointer;
+            font-size: 0.9rem;
         }
         .introPane {
             padding: 20px;
@@ -151,15 +148,15 @@
             </ul>
         </div>
         <div class="formPane">
-            <form action="/input" method="post">
+            <form action="/register" method="post">
+
                 <label for="email">Email</label>
-                <input type="text" class="textField" name="email">
-                <label for="email">Password</label>
-                <input type="password" class="textField">
-                <div class="buttons">
-                    <button type="input" name="input" value="register">Register</button>
-                    <button type="input" name="input" value="login">Login</button>
-                </div>
+                <input type="text" class="textField" name="email" required>
+
+                <label for="password">Password</label>
+                <input type="password" class="textField" name="password" min="8" max="12" required >
+
+                <input type="submit" name="input" value="Register" class="button">
               
             </form>
         </div>
@@ -175,7 +172,7 @@
                     <li>Look up your friends' friends</li>
                     <li>Post something cool, where only your college friends can see</li>
                 </ul>
-                <p>To get started, click to <a href="" class="registerAnchor">register</a>, if you haven't already!</p>
+                <p>If you're a registered user, click to <a href="" class="registerAnchor">login</a>!</p>
             </div>
             
         </div>
@@ -191,4 +188,20 @@
         </div>
     </div>
 </body>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector("form");
+    const emailInput = document.querySelector('input[name="email"]');
+
+    form.addEventListener("submit", function (event) {
+      const email = emailInput.value.trim();
+      if (!email.endsWith("@salesiancollege.net")) {
+        alert("Only @salesiancollege.net emails are allowed.");
+        event.preventDefault(); // Stop form submission
+      }
+    });
+  });
+</script>
+
 </html>

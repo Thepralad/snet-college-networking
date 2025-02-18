@@ -11,7 +11,8 @@ import (
 func main(){
 	fileServer := http.FileServer(http.Dir("static"))
 	http.Handle("/", fileServer)
-	http.HandleFunc("/input", handlers.InputMux)
+	http.HandleFunc("/register", handlers.RegisterHandler)
+	http.HandleFunc("/add", handlers.AddHandler)
 	fmt.Println("Server starting at :8080")
 	http.ListenAndServe(":8080", nil)
 }
