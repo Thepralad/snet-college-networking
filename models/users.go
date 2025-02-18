@@ -25,4 +25,3 @@ func UpdateRow(email string, password string) error{
 	}
 	return nil
 }
-
