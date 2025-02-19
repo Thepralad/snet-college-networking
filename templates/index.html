@@ -26,7 +26,7 @@
             align-items: center;
             padding: 20px;
             background-color: #f3911a;
-            color:rgb(122, 88, 29);
+            color:rgb(23, 22, 21);
             position: relative;
             height: 100px;
         }
@@ -76,6 +76,7 @@
             height: 30px;
             font-size: 0.9rem;
             padding-left: 5px;
+            border: 1px solid black;
         }
         .button{
             background-color: #f3911a;
@@ -142,7 +143,36 @@
             text-decoration: underline;
             cursor: pointer;
         }
-
+        @media (max-width: 768px){
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .header {
+                grid-column: 1;
+            }
+            .nav{
+                display: none;
+            }
+            .formPane {
+                border-right: none;
+            }
+            .textField {
+                height: 50px;
+                font-size: 1rem;
+                padding-left: 5px;
+            }
+            .button{
+                background-color: #f3911a;
+                color: white;
+                height: 60px;
+                width: 100px;
+                cursor: pointer;
+                font-size: 1.2rem;
+            }
+            .footer {
+                grid-column: 1;
+            }
+        }
     </style>
 </head>
 <body>
@@ -217,4 +247,3 @@
   });
 </script>
 
-</html>
