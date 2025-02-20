@@ -25,7 +25,7 @@
             align-items: center;
             padding: 20px;
             background-color: #f3911a;
-            color:rgb(122, 88, 29);
+            color:rgb(23, 22, 21);
             position: relative;
             height: 100px;
         }
@@ -68,6 +68,7 @@
             justify-content: center;
             align-items: center;
             gap: 50px;
+            text-align: center;
         }
 
         .formPane form {
@@ -82,6 +83,7 @@
             height: 30px;
             font-size: 0.9rem;
             padding-left: 5px;
+            border: 1px solid black;
         }
         .button{
             background-color: #f3911a;
@@ -151,6 +153,38 @@
             cursor: pointer;
         }
 
+        @media (max-width: 768px){
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .header {
+                grid-column: 1;
+            }
+            .nav{
+                display: none;
+            }
+            .formPane {
+                border-right: none;
+                padding-top: 100px;
+            }
+            .textField {
+                height: 50px;
+                font-size: 1rem;
+                padding-left: 5px;
+            }
+            .button{
+                background-color: #f3911a;
+                color: white;
+                height: 60px;
+                width: 100px;
+                cursor: pointer;
+                font-size: 1.2rem;
+            }
+            .footer {
+                grid-column: 1;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -165,7 +199,7 @@
             </ul>
         </div>
         <div class="formPane">
-            <p>Please avoid doing things that forces us to kick you out, enjoy!</p>
+            <p>If you're here, this means you're a registered user. <br> Enter your credentials to login.<p>
             <form action="/login" method="post">
 
                 <label for="email">Email</label>
