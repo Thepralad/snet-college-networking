@@ -14,7 +14,7 @@ func SendEmail(to []string, subject string, body string) error{
         os.Getenv("FROM_EMAIL_SMTP"),
     )
     message := "Subject: " + subject + "\r\n" +
-               "Content-Type: text/plain; charset=\"utf-8\"\r\n" +
+               "Content-Type: text/html; charset=\"utf-8\"\r\n" +
                "\r\n" + 
                body
     return smtp.SendMail(os.Getenv("SMTP_ADDR"), auth, os.Getenv("FROM_EMAIL"), to , []byte(message))
