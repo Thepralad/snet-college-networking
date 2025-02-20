@@ -6,7 +6,7 @@ import(
 )
 
 
-func UpdateRow(email string, password string) error{
+func InsertUser(email string, password string) error{
 	db, err := sql.Open("mysql", "root:25802580@tcp(127.0.0.1:3306)/snet")	
 	if err != nil{
 		return err
