@@ -151,6 +151,10 @@
             font-size: 1rem;
         }
 
+        .alert-message{
+            font-size: 0.9rem;
+        }
+
         @media (max-width: 768px){
             .container {
                 grid-template-columns: 1fr;
@@ -195,15 +199,30 @@
             </ul>
         </div>
         <div class="formPane">
-            <form action="/register" method="post">
+            <form action="/register" method="POST">
+                <label for="Username">Username</label>
+                <input type="text" class="textField" name="username" required placeholder="cmpauk">
+
+                <select name="deanery" class="dropdown">
+                  <option value="arts">Arts</option>
+                  <option value="commerce">Commerce</option>
+                  <option value="social_science">Social Science</option>
+                  <option value="science">Science 🚀</option>
+                </select>
+
+                <select name="year" class="dropdown">
+                  <option value="1">Freshmen/ First</option>
+                  <option value="2">Sophomore / Second</option>
+                  <option value="3">Senior / Third</option>
+                </select>
 
                 <label for="email">Email</label>
-                <input type="text" class="textField" name="email" required>
+                <input type="text" class="textField" name="email" required placeholder="xyz@salesiancollege.net">
 
                 <label for="password">Password</label>
-                <input type="password" class="textField" name="password" min="8" max="12" required >
+                <input type="password" class="textField" name="password" min="8" max="12" required placeholder="plz make me strong">
 
-                <p>{{.}}</p>
+                <p class="alert-message">{{.}}</p>
                 <input type="submit" name="input" value="Register" class="button">
               
             </form>
@@ -240,18 +259,4 @@
     </div>
 </body>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const form = document.querySelector("form");
-    const emailInput = document.querySelector('input[name="email"]');
-
-    form.addEventListener("submit", function (event) {
-      const email = emailInput.value.trim();
-      if (!email.endsWith("@salesiancollege.net")) {
-        alert("Only @salesiancollege.net emails are allowed.");
-        event.preventDefault();
-      }
-    });
-  });
-</script>
 

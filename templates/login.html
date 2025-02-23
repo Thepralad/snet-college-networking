@@ -167,9 +167,8 @@
             .nav{
                 display: none;
             }
-            .formPane {
-                border-right: none;
-                padding-top: 100px;
+            .formPane{
+                
             }
             .textField {
                 height: 50px;
@@ -203,20 +202,20 @@
             </ul>
         </div>
         <div class="formPane">
-            <p>If you're here, this means you're a registered user. <br> Enter your credentials to login.<p>
+            <h>A online social club for students of Salesian College</h>
             <form action="/login" method="post">
 
                 <label for="email">Email</label>
                 <input type="text" class="textField" name="email" required>
 
-                <p>{{.}}</p>
-
                 <label for="password">Password</label>
                 <input type="password" class="textField" name="password" min="8" max="12" required >
 
+                 <p>{{.}}</p>
                 <input type="submit" name="input" value="Login" class="button">
               
             </form>
+            <p>Not a user? <a href="http://localhost:8080/register">Register</a><p>
         </div>
       
         <div class="footer">
@@ -231,20 +230,5 @@
         </div>
     </div>
 </body>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const form = document.querySelector("form");
-    const emailInput = document.querySelector('input[name="email"]');
-
-    form.addEventListener("submit", function (event) {
-      const email = emailInput.value.trim();
-      if (!email.endsWith("@salesiancollege.net")) {
-        alert("Only @salesiancollege.net emails are allowed.");
-        event.preventDefault(); // Stop form submission
-      }
-    });
-  });
-</script>
 
 </html>
