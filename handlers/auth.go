@@ -1,11 +1,11 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/thepralad/snet-college-networking/models"
 	render "github.com/thepralad/snet-college-networking/templates"
+	"github.com/thepralad/snet-college-networking/types"
 	"github.com/thepralad/snet-college-networking/utils"
 )
 
@@ -28,13 +28,13 @@ func RegisterHandler(res http.ResponseWriter, req *http.Request) {
 		year := req.FormValue("year")
 
 		if !utils.IsValidEmail(email) {
-			render.RenderTemplate(res, "register", "Only @salesiancollege.net email accepted!")
+			render.RenderTemplate(res, "register", types.Message{Alert: "@salesiancollege.net email only"})
 			return
 		}
 
 		err := models.InsertUser(username, email, password, deanery, year)
 		if err != nil {
-			render.RenderTemplate(res, "register", "Error registering user, please try again!")
+			render.RenderTemplate(res, "register", types.Message{Alert: "Error registering user, please try again!"})
 			return
 		}
 
@@ -42,7 +42,7 @@ func RegisterHandler(res http.ResponseWriter, req *http.Request) {
 		return
 
 	}
-	render.RenderTemplate(res, "register", "")
+	render.RenderTemplate(res, "register", types.Message{Alert: ""})
 }
 
 func LoginHandler(res http.ResponseWriter, req *http.Request) {
@@ -51,13 +51,13 @@ func LoginHandler(res http.ResponseWriter, req *http.Request) {
 		password := req.FormValue("password")
 
 		if !utils.IsValidEmail(email) {
-			render.RenderTemplate(res, "register", "Only @salesiancollege.net email accepted!")
+			render.RenderTemplate(res, "login", types.Message{Alert: "Only @salesiancollege.net email accepted!"})
 			return
 		}
 
-		_id, _username, _password, _ := models.GetUserByEmail(email)
+		_id, _, _password, _ := models.GetUserByEmail(email)
 		if password != _password {
-			render.RenderTemplate(res, "login", "Incorrect email/password")
+			render.RenderTemplate(res, "login", types.Message{Alert: "Incorrect email/password"})
 			return
 		}
 
@@ -71,13 +71,13 @@ func LoginHandler(res http.ResponseWriter, req *http.Request) {
 
 		err := models.InsertSession(_id, sessionToken)
 		if err != nil {
-			render.RenderTemplate(res, "login", "Error creating session, please try again!")
+			render.RenderTemplate(res, "login", types.Message{Alert: "Error creating session, please try again!"})
 			return
 		}
 
-		fmt.Fprintln(res, "welcome: "+_username)
+		http.Redirect(res, req, "/feeds", http.StatusFound)
 
 		return
 	}
-	render.RenderTemplate(res, "login", "")
+	render.RenderTemplate(res, "login", types.Message{Alert: ""})
 }

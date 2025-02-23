@@ -5,4 +5,9 @@ type User struct {
 	Email    string
 	Deanery  string
 	Year     string
+	Created  string
+}
+
+type Message struct {
+	Alert string
 }

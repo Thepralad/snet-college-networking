@@ -78,8 +78,8 @@ func GetSession(sessionToken string) (int, error) {
 
 func GetUserByUserId(userId int) (*types.User, error) {
 	initDB()
-	var username, email, deanery, year string
-	err := DB.QueryRow("SELECT username, email, deanery, year FROM users WHERE id = ?", userId).Scan(&username, &email, &deanery, &year)
+	var username, email, deanery, year, created_at string
+	err := DB.QueryRow("SELECT username, email, deanery, year, created_at FROM users WHERE id = ?", userId).Scan(&username, &email, &deanery, &year, &created_at)
 	if err != nil {
 		return nil, err
 	}
@@ -88,5 +88,6 @@ func GetUserByUserId(userId int) (*types.User, error) {
 		Email:    email,
 		Deanery:  deanery,
 		Year:     year,
+		Created:  created_at,
 	}, nil
 }

@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/thepralad/snet-college-networking/models"
@@ -23,8 +22,10 @@ func FeedsHandler(res http.ResponseWriter, req *http.Request) {
 
 	user, err := models.GetUserByUserId(userId)
 	if err != nil {
-		render.RenderTemplate(res, "login", "Error creating session, please try again!")
+
+		http.Redirect(res, req, "/login", http.StatusFound)
+		return
 	}
 
-	fmt.Fprintf(res, "Username: %s, Email: %v, Deanery: %v", user.Username, user.Email, user.Deanery)
+	render.RenderTemplate(res, "feeds", user)
 }
