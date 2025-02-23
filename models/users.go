@@ -4,6 +4,7 @@ import (
 	"database/sql"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/thepralad/snet-college-networking/types"
 )
 
 // DB is a global database connection pool
@@ -75,12 +76,17 @@ func GetSession(sessionToken string) (int, error) {
 	return userId, nil
 }
 
-func GetUsernameByUserId(userId int) (string, error) {
+func GetUserByUserId(userId int) (*types.User, error) {
 	initDB()
-	var username string
-	err := DB.QueryRow(("Select username from users where id = ?"), userId).Scan(&username)
+	var username, email, deanery, year string
+	err := DB.QueryRow("SELECT username, email, deanery, year FROM users WHERE id = ?", userId).Scan(&username, &email, &deanery, &year)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	return username, nil
+	return &types.User{
+		Username: username,
+		Email:    email,
+		Deanery:  deanery,
+		Year:     year,
+	}, nil
 }
