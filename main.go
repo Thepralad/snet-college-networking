@@ -15,13 +15,10 @@ func main() {
 	http.HandleFunc("/login", handlers.LoginHandler)
 	http.HandleFunc("/register", handlers.RegisterHandler)
 
-<<<<<<< HEAD
-	http.HandleFunc("/feeds", handlers.FeedsHandler)
-=======
 	http.HandleFunc("/logout", handlers.LogoutHandler)
 	http.HandleFunc("/feeds", handlers.FeedsHandler)
+
 	http.HandleFunc("/post", handlers.PostFeedHandler)
->>>>>>> feature
 	fmt.Println("Server starting at :8080")
 	http.ListenAndServe(":8080", nil)
 }

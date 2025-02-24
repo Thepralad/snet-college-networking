@@ -61,6 +61,9 @@
             padding: 20px;
             border-right: 1px solid black;
             background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+
         }
 
         .profile img {
@@ -138,7 +141,7 @@
         }
         .postInputField{
             width: 800px;
-            height: 100px;
+            height: 60px;
             resize: none;
             font-size: 1rem;
             padding: 10px;
@@ -178,9 +181,21 @@
             max-height: 500px; 
             overflow-y: auto; 
             display: flex;
-            flex-direction: column-reverse;
+            flex-direction: column;
             scrollbar-width: none;
-             -ms-overflow-style: none;
+            -ms-overflow-style: none;
+        }
+        .logoutBtn{
+            margin-top: 170px;
+        }
+        .logoutForm .logoutBtn{
+            width: 80px;
+            height: 40px;
+            background-color: #d92a27d1;
+            color:white;
+            cursor: pointer;
+            border: 1px solid black; 
+            justify-self: flex-end;
         }
     </style>
     </style>
@@ -211,10 +226,11 @@
                 <p><strong>Year: </strong>{{.user.Year}} 📕</p>
                 <hr>
                 <p><strong>Joined at: </strong>{{.user.Created}}</p>
+                <hr>
             </div>
 
-            <form action="/logout" method="get">
-                <button type="submit">Log out</button>
+            <form action="/logout" method="get" class="logoutForm">
+                <button type="submit" class="logoutBtn">Log out</button>
             </form>
           
         </div>
