@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Old School Twitter Clone</title>
+    <title>SNET</title>
     <style>
         * {
             padding: 0;
@@ -14,13 +14,13 @@
 
         .container {
             display: grid;
-            grid-template-rows: auto 1fr auto;
-            grid-template-columns: 1fr 3fr;
+            grid-template-rows: auto 1fr;
+            grid-template-columns: 1fr 3fr 1fr;
             height: 100vh;
         }
 
         .header {
-            grid-column: 1 / 3;
+            grid-column: 1 / 4;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -56,37 +56,66 @@
             text-decoration: underline;
         }
 
-        .profile {
+        .profile { 
+            grid-column: 1/2;
             padding: 20px;
             border-right: 1px solid black;
             background-color: #f9f9f9;
         }
 
         .profile img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin-bottom: 10px;
+            width: 250px;
+        }
+        .profile .info{
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
         }
 
         .feed {
             padding: 20px;
             background-color: #f9f9f9;
+            grid-column: 2/3;
         }
 
-        .feed .post {
-            background: white;
-            padding: 15px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .footer {
-            grid-column: 1 / 3;
-            text-align: center;
-            padding: 10px;
+        .top-users{
+            grid-column: 3/4;
+            padding: 20px;
             background-color: #f9f9f9;
+            border-left: 1px solid black;
+        }
+        .post-content, .post-footer{
+            padding-left: 50px;
+        }
+        .post .post-user-info{
+            display: flex;
+            flex-direction: column;
+        }
+        .post .post-user-info .post-email{
+            color: rgba(0, 0, 0, 0.353);
+        }
+        .post .post-header{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .post .post-time{
+            color: rgba(0, 0, 0, 0.369);
+        }
+        .post .post-actions{
+            padding-top: 12px;
+        }
+        .post img{
+            width: 40px;
+            height: 50px;
+            object-fit: cover;
+        }
+        .post {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border: 1px solid black;
+            padding: 10px;
         }
 
         .menu {
@@ -96,6 +125,27 @@
             left: 20px;
         }
 
+        .postInput {
+            margin-bottom: 30px;
+        }
+        .postInput button{
+            width: 80px;
+            height: 40px;
+            background-color: #f3911ad1;
+            color:white;
+            cursor: pointer;
+            border: 1px solid black;
+        }
+        .postInputField{
+            width: 800px;
+            height: 100px;
+            resize: none;
+            font-size: 1rem;
+            padding: 10px;
+        }
+        .extension{
+            font-size: 0.9rem;
+        }
         @media (max-width: 768px) {
             .container {
                 grid-template-columns: 1fr;
@@ -123,6 +173,16 @@
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             }
         }
+        .contents {
+            gap: 10px;
+            max-height: 500px; 
+            overflow-y: auto; 
+            display: flex;
+            flex-direction: column-reverse;
+            scrollbar-width: none;
+             -ms-overflow-style: none;
+        }
+    </style>
     </style>
 </head>
 <body>
@@ -139,25 +199,59 @@
         </div>
 
         <div class="profile">
-            <img src="images.jpeg" alt="Profile Picture">
-            <p>{{.}}</p>
+            <a href="#"><img src="../static/default-avater.jpg" alt="Profile Picture"></a>
+            
+            <div class="info">
+                <p><strong>{{.user.Username}}</strong> (this is you)</p>
+                <hr>
+                <p><strong>Email: </strong>{{.user.Email}}</p>
+                <hr>
+                <p><strong>Deanery: </strong>{{.user.Deanery}}</p>
+                <hr>
+                <p><strong>Year: </strong>{{.user.Year}} 📕</p>
+                <hr>
+                <p><strong>Joined at: </strong>{{.user.Created}}</p>
+            </div>
+
+            <form action="/logout" method="get">
+                <button type="submit">Log out</button>
+            </form>
+          
         </div>
 
         <div class="feed">
-            <form action="/protected" method="post">
-                <textarea name="" placeholder="Whats goin on..."></textarea>
+            <form action="/post" method="post" class="postInput">
+                <textarea name="content" placeholder="Whats goin on..." class="postInputField"></textarea>
+                <button type="submit">POST</button>
             </form>
-            <div class="post">
-                <p><strong>John Doe</strong> - Just joined SNET! Excited to connect with everyone.</p>
+            <div class="contents">
+                {{range .feeds}}
+                <div class="post">
+                    <div class="post-header">
+                        <img src="../static/default-avater.jpg" alt="Profile Picture" class="post-avatar">
+                        <div class="post-user-info">
+                            <span class="post-username">{{.Username}}</span>
+                            <span class="post-email">{{.Email}}</span>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <p>{{.Content}}</p>
+                    </div>
+                    <div class="post-footer">
+                        <span class="post-time">{{.Created}}</span>
+                        <div class="post-actions">
+                            <button class="vote-btn upvote">▲</button>
+                            <span class="vote-count">{{.Metric}}</span>
+                            <button class="vote-btn downvote">▼</button>
+                        </div>
+                    </div>
+                </div>
+                {{end}}
             </div>
-            <div class="post">
-                <p><strong>Jane Smith</strong> - Loving the new SNET platform! 🔥</p>
-            </div>
+            
         </div>
 
-        <div class="footer">
-            <p>the college website was shitty, so we created ours.</p>
-        </div>
+        <div class="top-users">TOP TIER USERS</div>
     </div>
 </body>
 </html>

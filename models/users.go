@@ -66,7 +66,7 @@ func InsertSession(userID int, sessionToken string) error {
 	return nil
 }
 
-func GetSession(sessionToken string) (int, error) {
+func GetUserIdFromSession(sessionToken string) (int, error) {
 	initDB()
 	var userId int
 	err := DB.QueryRow("SELECT user_id from session where session_token = ?", sessionToken).Scan(&userId)
@@ -78,8 +78,8 @@ func GetSession(sessionToken string) (int, error) {
 
 func GetUserByUserId(userId int) (*types.User, error) {
 	initDB()
-	var username, email, deanery, year string
-	err := DB.QueryRow("SELECT username, email, deanery, year FROM users WHERE id = ?", userId).Scan(&username, &email, &deanery, &year)
+	var username, email, deanery, year, created_at string
+	err := DB.QueryRow("SELECT username, email, deanery, year, created_at FROM users WHERE id = ?", userId).Scan(&username, &email, &deanery, &year, &created_at)
 	if err != nil {
 		return nil, err
 	}
@@ -88,5 +88,6 @@ func GetUserByUserId(userId int) (*types.User, error) {
 		Email:    email,
 		Deanery:  deanery,
 		Year:     year,
+		Created:  created_at,
 	}, nil
 }

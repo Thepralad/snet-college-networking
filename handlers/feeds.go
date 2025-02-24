@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/thepralad/snet-college-networking/models"
@@ -15,7 +14,7 @@ func FeedsHandler(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	userId, err := models.GetSession(sessionToken.Value)
+	userId, err := models.GetUserIdFromSession(sessionToken.Value)
 	if err != nil {
 		http.Redirect(res, req, "/login", http.StatusFound)
 		return
@@ -23,8 +22,33 @@ func FeedsHandler(res http.ResponseWriter, req *http.Request) {
 
 	user, err := models.GetUserByUserId(userId)
 	if err != nil {
-		render.RenderTemplate(res, "login", "Error creating session, please try again!")
+		http.Redirect(res, req, "/login", http.StatusFound)
+		return
+	}
+	feeds, err := models.GetFeedsArray()
+	if err != nil {
+		http.Redirect(res, req, "/login", http.StatusFound)
+		return
 	}
 
-	fmt.Fprintf(res, "Username: %s, Email: %v, Deanery: %v", user.Username, user.Email, user.Deanery)
+	render.RenderTemplate(res, "feeds", map[string]interface{}{
+		"user":  user,
+		"feeds": feeds,
+	})
+}
+
+func PostFeedHandler(res http.ResponseWriter, req *http.Request) {
+	if req.Method == http.MethodPost {
+		sessionToken, err := req.Cookie("session_token")
+		if err != nil {
+			return
+		}
+		userId, err := models.GetUserIdFromSession(sessionToken.Value)
+		if err != nil {
+			return
+		}
+		models.PostFeed(userId, req.FormValue("content"))
+		http.Redirect(res, req, "/feeds", http.StatusFound)
+	}
+
 }
