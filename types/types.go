@@ -11,3 +11,11 @@ type User struct {
 type Message struct {
 	Alert string
 }
+
+type Post struct {
+	Username string
+	Email    string
+	Content  string
+	Created  string
+	Metric   string
+}

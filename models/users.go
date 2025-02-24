@@ -66,7 +66,7 @@ func InsertSession(userID int, sessionToken string) error {
 	return nil
 }
 
-func GetSession(sessionToken string) (int, error) {
+func GetUserIdFromSession(sessionToken string) (int, error) {
 	initDB()
 	var userId int
 	err := DB.QueryRow("SELECT user_id from session where session_token = ?", sessionToken).Scan(&userId)

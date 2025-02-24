@@ -173,6 +173,15 @@
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             }
         }
+        .contents {
+            gap: 10px;
+            max-height: 500px; 
+            overflow-y: auto; 
+            display: flex;
+            flex-direction: column-reverse;
+            scrollbar-width: none;
+             -ms-overflow-style: none;
+        }
     </style>
     </style>
 </head>
@@ -193,15 +202,15 @@
             <a href="#"><img src="../static/default-avater.jpg" alt="Profile Picture"></a>
             
             <div class="info">
-                <p><strong>{{.Username}}</strong> (this is you)</p>
+                <p><strong>{{.user.Username}}</strong> (this is you)</p>
                 <hr>
-                <p><strong>Email: </strong>{{.Email}}</p>
+                <p><strong>Email: </strong>{{.user.Email}}</p>
                 <hr>
-                <p><strong>Deanery: </strong>{{.Deanery}}</p>
+                <p><strong>Deanery: </strong>{{.user.Deanery}}</p>
                 <hr>
-                <p><strong>Year: </strong>{{.Year}} 📕</p>
+                <p><strong>Year: </strong>{{.user.Year}} 📕</p>
                 <hr>
-                <p><strong>Joined at: </strong>{{.Created}}</p>
+                <p><strong>Joined at: </strong>{{.user.Created}}</p>
             </div>
 
             <form action="/logout" method="get">
@@ -211,32 +220,35 @@
         </div>
 
         <div class="feed">
-            <form action="/protected" method="post" class="postInput">
-                <textarea name="" placeholder="Whats goin on..." class="postInputField"></textarea>
+            <form action="/post" method="post" class="postInput">
+                <textarea name="content" placeholder="Whats goin on..." class="postInputField"></textarea>
                 <button type="submit">POST</button>
             </form>
-
-            <div class="post">
-                <div class="post-header">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTr0HJ48rJ38FGdQyN6V6n4iYAyqQMDOY7K-w&s" alt="Profile Picture" class="post-avatar">
-                    <div class="post-user-info">
-                        <span class="post-username">Elon Musk</span>
-                        <span class="post-email">elonmusk@salesiancollege.net</span>
+            <div class="contents">
+                {{range .feeds}}
+                <div class="post">
+                    <div class="post-header">
+                        <img src="../static/default-avater.jpg" alt="Profile Picture" class="post-avatar">
+                        <div class="post-user-info">
+                            <span class="post-username">{{.Username}}</span>
+                            <span class="post-email">{{.Email}}</span>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <p>{{.Content}}</p>
+                    </div>
+                    <div class="post-footer">
+                        <span class="post-time">{{.Created}}</span>
+                        <div class="post-actions">
+                            <button class="vote-btn upvote">▲</button>
+                            <span class="vote-count">{{.Metric}}</span>
+                            <button class="vote-btn downvote">▼</button>
+                        </div>
                     </div>
                 </div>
-                <div class="post-content">
-                    <p>I think it's very important to have a feedback loop, where you're constantly thinking about what you've done and how you could be doing it better. I think that's the single best piece of advice: constantly think about how you could be doing things better and questioning yourself.</p>
-                </div>
-                <div class="post-footer">
-                    <span class="post-time">2 hours ago</span>
-                    <div class="post-actions">
-                        <button class="vote-btn upvote">▲</button>
-                        <span class="vote-count">0</span>
-                        <button class="vote-btn downvote">▼</button>
-                    </div>
-                </div>
+                {{end}}
             </div>
-
+            
         </div>
 
         <div class="top-users">TOP TIER USERS</div>
