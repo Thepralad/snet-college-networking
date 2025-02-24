@@ -76,8 +76,21 @@ func LoginHandler(res http.ResponseWriter, req *http.Request) {
 		}
 
 		http.Redirect(res, req, "/feeds", http.StatusFound)
-
 		return
 	}
 	render.RenderTemplate(res, "login", types.Message{Alert: ""})
+}
+
+func LogoutHandler(res http.ResponseWriter, req *http.Request) {
+	_, err := req.Cookie("session_token")
+	if err != nil {
+		http.Redirect(res, req, "/login", http.StatusFound)
+		return
+	}
+	http.SetCookie(res, &http.Cookie{
+		Name:   "session_token",
+		Value:  "",
+		MaxAge: 3600,
+	})
+	http.Redirect(res, req, "/login", http.StatusFound)
 }
