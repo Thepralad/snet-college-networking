@@ -2,12 +2,17 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/thepralad/snet-college-networking/handlers"
+	"github.com/thepralad/snet-college-networking/models"
 )
 
 func main() {
+	if err := models.InitDB(); err != nil {
+		log.Fatal(err)
+	}
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 

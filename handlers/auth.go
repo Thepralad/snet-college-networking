@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/thepralad/snet-college-networking/models"
@@ -34,6 +35,7 @@ func RegisterHandler(res http.ResponseWriter, req *http.Request) {
 
 		err := models.InsertUser(username, email, password, deanery, year)
 		if err != nil {
+			fmt.Println(err)
 			render.RenderTemplate(res, "register", types.Message{Alert: "Error registering user, please try again!"})
 			return
 		}

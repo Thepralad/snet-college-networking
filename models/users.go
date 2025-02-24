@@ -2,8 +2,10 @@ package models
 
 import (
 	"database/sql"
+	"os"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/joho/godotenv"
 	"github.com/thepralad/snet-college-networking/types"
 )
 
@@ -11,9 +13,14 @@ import (
 var DB *sql.DB
 
 // InitDB initializes the database connection
-func initDB() error {
+func InitDB() error {
+	godotenv.Load()
 	var err error
-	DB, err = sql.Open("mysql", "root:25802580@tcp(127.0.0.1:3306)/snet")
+	dbUsername := os.Getenv("DB_USERNAME")
+	dbPassword := os.Getenv("DB_PASSWORD")
+
+	connectionString := dbUsername + ":" + dbPassword + "@tcp(mysql-152cca74-snet.i.aivencloud.com:21979)/defaultdb"
+	DB, err = sql.Open("mysql", connectionString)
 	if err != nil {
 		return err
 	}
@@ -25,8 +32,9 @@ func initDB() error {
 	return nil
 }
 
+// Inserts user to the database --- it takes (username, email, password, deanery, year)
+// [used for registering]
 func InsertUser(username string, email string, password string, deanery string, year string) error {
-	initDB()
 	stmt, err := DB.Prepare("INSERT INTO users(username, email, password, deanery, year) VALUES(?, ?, ?, ?, ?)")
 	if err != nil {
 		return err
@@ -41,8 +49,9 @@ func InsertUser(username string, email string, password string, deanery string, 
 	return nil
 }
 
+// Get the user email --- it takes (email) and gives (userId, username, password)
+// [user in logging in]
 func GetUserByEmail(email string) (int, string, string, error) {
-	initDB()
 	stmt, err := DB.Prepare("SELECT id, username, password FROM users where email = ?")
 	if err != nil {
 		return 0, "", "", err
@@ -57,8 +66,8 @@ func GetUserByEmail(email string) (int, string, string, error) {
 	return userId, username, password, nil
 }
 
+// Inserts a session token with its respective username -- it takes (userid, sessionToken)
 func InsertSession(userID int, sessionToken string) error {
-	initDB()
 	_, err := DB.Exec("INSERT into session (user_id, session_token) VALUES (?, ?)", userID, sessionToken)
 	if err != nil {
 		return err
@@ -66,8 +75,8 @@ func InsertSession(userID int, sessionToken string) error {
 	return nil
 }
 
+// Gets userId by sessionToken -- it takes (userId)
 func GetUserIdFromSession(sessionToken string) (int, error) {
-	initDB()
 	var userId int
 	err := DB.QueryRow("SELECT user_id from session where session_token = ?", sessionToken).Scan(&userId)
 	if err != nil {
@@ -76,8 +85,8 @@ func GetUserIdFromSession(sessionToken string) (int, error) {
 	return userId, nil
 }
 
+// Gets user basic info --- it takes (userId)
 func GetUserByUserId(userId int) (*types.User, error) {
-	initDB()
 	var username, email, deanery, year, created_at string
 	err := DB.QueryRow("SELECT username, email, deanery, year, created_at FROM users WHERE id = ?", userId).Scan(&username, &email, &deanery, &year, &created_at)
 	if err != nil {

@@ -3,7 +3,6 @@ package models
 import "github.com/thepralad/snet-college-networking/types"
 
 func PostFeed(userId int, content string) error {
-	initDB()
 	stmt, err := DB.Prepare("INSERT INTO feeds(user_id, content) Values(?,?)")
 	if err != nil {
 		return err
@@ -19,7 +18,6 @@ func PostFeed(userId int, content string) error {
 }
 
 func GetFeedsArray() ([]types.Post, error) {
-	initDB()
 	var postArr []types.Post
 	rows, err := DB.Query(`SELECT users.username, users.email, feeds.content, feeds.created_at, feeds.metric
 						FROM feeds
