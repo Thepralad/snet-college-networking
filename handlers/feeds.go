@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/thepralad/snet-college-networking/models"
@@ -31,9 +32,14 @@ func FeedsHandler(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	userInfo, err := models.GetUserInfo(user.Email)
+	if err != nil {
+		fmt.Println(err)
+	}
 	render.RenderTemplate(res, "feeds", map[string]interface{}{
-		"user":  user,
-		"feeds": feeds,
+		"user":     user,
+		"feeds":    feeds,
+		"userInfo": userInfo,
 	})
 }
 

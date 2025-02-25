@@ -100,3 +100,50 @@ func GetUserByUserId(userId int) (*types.User, error) {
 		Created:  created_at,
 	}, nil
 }
+
+func InsertUserInfos(userInfo *types.UserInfo) error {
+	_, err := DB.Exec(`INSERT INTO user_info(bio, gender, phone, rel_status, top_artist,
+					 looking_for, insta_username, email) values(?, ?, ?, ?, ?, ?, ?, ?)`,
+		userInfo.Bio, userInfo.Gender, userInfo.Phone,
+		userInfo.RelStatus, userInfo.TopArtist, userInfo.LookingFor, userInfo.InstaUsername, userInfo.Email)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func GetUserInfo(email string) (*types.UserInfo, error) {
+	var userInfo types.UserInfo
+
+	err := DB.QueryRow("SELECT bio, gender, phone, rel_status, top_artist, looking_for, insta_username FROM user_info WHERE email = ?", email).Scan(&userInfo.Bio, &userInfo.Gender, &userInfo.Phone, &userInfo.RelStatus, &userInfo.TopArtist, &userInfo.LookingFor, &userInfo.InstaUsername)
+	if err != nil {
+		if err.Error() == "sql: no rows in result set" {
+			// Return empty userInfo if no record found
+			userInfo = types.UserInfo{
+				Bio:           "",
+				Gender:        "",
+				Phone:         "",
+				RelStatus:     "",
+				TopArtist:     "",
+				LookingFor:    "",
+				InstaUsername: "",
+			}
+			return &userInfo, nil
+		}
+		return nil, err
+	}
+	return &userInfo, nil
+}
+
+func UpdateUserInfo(userInfo *types.UserInfo, email string) error {
+	_, err := DB.Exec(`UPDATE user_info SET bio = ?, gender = ?, phone = ?, 
+					rel_status = ?, top_artist = ?, looking_for = ?, insta_username = ? 
+					WHERE email = ?`, userInfo.Bio, userInfo.Gender, userInfo.Phone,
+		userInfo.RelStatus, userInfo.TopArtist, userInfo.LookingFor,
+		userInfo.InstaUsername, email)
+	if err != nil {
+		return err
+	}
+	return nil
+
+}

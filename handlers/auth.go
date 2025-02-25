@@ -40,6 +40,19 @@ func RegisterHandler(res http.ResponseWriter, req *http.Request) {
 			return
 		}
 
+		userInfo := types.UserInfo{
+			Bio:           req.FormValue("bio"),
+			Gender:        req.FormValue("gender"),
+			Phone:         req.FormValue("phone"),
+			RelStatus:     req.FormValue("relationship"),
+			TopArtist:     req.FormValue("top_artist"),
+			LookingFor:    req.FormValue("looking_for"),
+			InstaUsername: req.FormValue("instagram"),
+			Email:         email,
+		}
+
+		models.InsertUserInfos(&userInfo)
+
 		http.Redirect(res, req, "/login", http.StatusFound)
 		return
 

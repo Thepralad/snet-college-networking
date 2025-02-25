@@ -19,3 +19,14 @@ type Post struct {
 	Created  string
 	Metric   string
 }
+
+type UserInfo struct {
+	Bio           string
+	Gender        string
+	Phone         string
+	RelStatus     string
+	TopArtist     string
+	LookingFor    string
+	InstaUsername string
+	Email         string
+}

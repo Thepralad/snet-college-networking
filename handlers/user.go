@@ -6,25 +6,67 @@ import (
 
 	"github.com/thepralad/snet-college-networking/models"
 	render "github.com/thepralad/snet-college-networking/templates"
+	"github.com/thepralad/snet-college-networking/types"
 )
 
 func EditProfileHandler(res http.ResponseWriter, req *http.Request) {
-	sessionToken, err := req.Cookie("session_token")
-	if err != nil {
-		return
+	if req.Method == http.MethodPost {
+		sessionToken, err := req.Cookie("session_token")
+		if err != nil {
+			return
+		}
+		userId, err := models.GetUserIdFromSession(sessionToken.Value)
+		if err != nil {
+			return
+		}
+		user, err := models.GetUserByUserId(userId)
+		if err != nil {
+			return
+		}
+		userInfo := types.UserInfo{
+			Bio:           req.FormValue("bio"),
+			Gender:        req.FormValue("gender"),
+			Phone:         req.FormValue("phone"),
+			RelStatus:     req.FormValue("relationship"),
+			TopArtist:     req.FormValue("top_artist"),
+			LookingFor:    req.FormValue("looking_for"),
+			InstaUsername: req.FormValue("instagram"),
+		}
+
+		err = models.UpdateUserInfo(&userInfo, user.Email)
+		if err != nil {
+			fmt.Print(err)
+		}
+		http.Redirect(res, req, "/feeds", http.StatusFound)
 	}
-	userId, err := models.GetUserIdFromSession(sessionToken.Value)
-	if err != nil {
+
+	if req.Method == http.MethodGet {
+		sessionToken, err := req.Cookie("session_token")
+		if err != nil {
+			return
+		}
+		userId, err := models.GetUserIdFromSession(sessionToken.Value)
+		if err != nil {
+			return
+		}
+
+		user, err := models.GetUserByUserId(userId)
+		if err != nil {
+			http.Redirect(res, req, "/login", http.StatusFound)
+			return
+		}
+		userInfo, err := models.GetUserInfo(user.Email)
+		if err != nil {
+			fmt.Println(err)
+		}
+		err = render.RenderTemplate(res, "edit", map[string]interface{}{
+			"user":     user,
+			"userInfo": userInfo,
+		})
+		if err != nil {
+			fmt.Fprintln(res, err)
+		}
 		return
 	}
 
-	user, err := models.GetUserByUserId(userId)
-	if err != nil {
-		http.Redirect(res, req, "/login", http.StatusFound)
-		return
-	}
-	err = render.RenderTemplate(res, "edit", user)
-	if err != nil {
-		fmt.Fprintln(res, err)
-	}
 }
