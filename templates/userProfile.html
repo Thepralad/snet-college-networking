@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        img{
+            width: 40px;
+            height: 40px;
+        }
+    </style>
+</head>
+<body>
+    <img src="{{.vUserInfo.Img_Url}}" alt="{{.vUser.Username}}'s profile picture">
+    <p>{{.vUser.Username}}</p>
+    <p>Email: {{.vUser.Email}}</p>
+    <p>Deanery: {{.vUser.Deanery}}</p>
+    <p>Year: {{.vUser.Year}}</p>
+    <p>Member Since: {{.vUser.Created}}</p>
+
+    <h3>Additional Information</h3>
+    {{if .vUserInfo.Bio}}
+        <p>Bio: {{.vUserInfo.Bio}}</p>
+    {{end}}
+    {{if .vUserInfo.Gender}}
+        <p>Gender: {{.vUserInfo.Gender}}</p>
+    {{end}}
+    {{if .vUserInfo.Phone}}
+        <p>Phone: {{.vUserInfo.Phone}}</p>
+    {{end}}
+    {{if .vUserInfo.RelStatus}}
+        <p>Relationship Status: {{.vUserInfo.RelStatus}}</p>
+    {{end}}
+    {{if .vUserInfo.TopArtist}}
+        <p>Favorite Artist: {{.vUserInfo.TopArtist}}</p>
+    {{end}}
+    {{if .vUserInfo.LookingFor}}
+        <p>Looking For: {{.vUserInfo.LookingFor}}</p>
+    {{end}}
+    {{if .vUserInfo.InstaUsername}}
+        <p>Instagram: {{.vUserInfo.InstaUsername}}</p>
+    {{end}}
+    <form action="/poke" method="post">
+        <input type="hidden" name="email" value="{{.vUser.Email}}">
+        <button type="submit">Poke</button>
+    </form>
+</body>
+</html>

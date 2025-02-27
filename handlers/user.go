@@ -2,7 +2,9 @@ package handlers
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"strings"
 
 	"github.com/thepralad/snet-college-networking/models"
 	"github.com/thepralad/snet-college-networking/services"
@@ -26,6 +28,9 @@ func EditProfileHandler(res http.ResponseWriter, req *http.Request) {
 		}
 
 		imgFile, _, err := req.FormFile("image")
+		if err != nil {
+			log.Fatal(err)
+		}
 		imgUrl, _ := services.UploadImg(imgFile)
 		userInfo := types.UserInfo{
 			Bio:           req.FormValue("bio"),
@@ -79,4 +84,61 @@ func EditProfileHandler(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+}
+
+func UserProfileHandler(res http.ResponseWriter, req *http.Request) {
+	// Getting the original user
+	sessionToken, err := req.Cookie("session_token")
+	if err != nil {
+		http.Redirect(res, req, "/login", http.StatusFound)
+		return
+	}
+
+	user, err := models.GetUserIdFromSession(sessionToken.Value)
+	if err != nil {
+		http.Redirect(res, req, "/login", http.StatusFound)
+	}
+	_ = user
+
+	// Getting the view user
+	vUsername := strings.TrimPrefix(req.URL.Path, "/user/")
+
+	vUser, err := models.GetUserByUsername(vUsername)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	vUserInfo, err := models.GetUserInfo(vUser.Email)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	render.RenderTemplate(res, "userProfile", map[string]interface{}{
+		"vUser":     vUser,
+		"vUserInfo": vUserInfo,
+	})
+
+}
+
+func PokeUser(res http.ResponseWriter, req *http.Request) {
+
+	sessionToken, err := req.Cookie("session_token")
+	if err != nil {
+		http.Redirect(res, req, "/login", http.StatusFound)
+		return
+	}
+
+	fromUser, err := models.GetUserIdFromSession(sessionToken.Value)
+	if err != nil {
+		http.Redirect(res, req, "/login", http.StatusFound)
+	}
+
+	toUser, username, _, err := models.GetUserByEmail(req.FormValue("email"))
+	if err != nil {
+		http.Error(res, "User not found", http.StatusNotFound)
+		return
+	}
+
+	models.PokeUser(fromUser, toUser)
+	http.Redirect(res, req, "/user/"+username, http.StatusFound)
 }

@@ -85,6 +85,15 @@ func GetUserIdFromSession(sessionToken string) (int, error) {
 	return userId, nil
 }
 
+func GetUserByUsername(username string) (*types.User, error) {
+	var user types.User
+	err := DB.QueryRow("SELECT username, email, deanery, year FROM users WHERE username = ?", username).Scan(&user.Username, &user.Email, &user.Deanery, &user.Year)
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
 // Gets user basic info --- it takes (userId)
 func GetUserByUserId(userId int) (*types.User, error) {
 	var username, email, deanery, year, created_at string
