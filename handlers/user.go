@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/thepralad/snet-college-networking/models"
+	"github.com/thepralad/snet-college-networking/services"
 	render "github.com/thepralad/snet-college-networking/templates"
 	"github.com/thepralad/snet-college-networking/types"
 )
@@ -23,6 +24,9 @@ func EditProfileHandler(res http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			return
 		}
+
+		imgFile, _, err := req.FormFile("image")
+		imgUrl, _ := services.UploadImg(imgFile)
 		userInfo := types.UserInfo{
 			Bio:           req.FormValue("bio"),
 			Gender:        req.FormValue("gender"),
@@ -31,6 +35,12 @@ func EditProfileHandler(res http.ResponseWriter, req *http.Request) {
 			TopArtist:     req.FormValue("top_artist"),
 			LookingFor:    req.FormValue("looking_for"),
 			InstaUsername: req.FormValue("instagram"),
+			Img_Url:       imgUrl,
+		}
+
+		if imgUrl == "" {
+			existingUserInfo, _ := models.GetUserInfo(user.Email)
+			userInfo.Img_Url = existingUserInfo.Img_Url
 		}
 
 		err = models.UpdateUserInfo(&userInfo, user.Email)

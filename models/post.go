@@ -19,16 +19,17 @@ func PostFeed(userId int, content string) error {
 
 func GetFeedsArray() ([]types.Post, error) {
 	var postArr []types.Post
-	rows, err := DB.Query(`SELECT users.username, users.email, feeds.content, feeds.created_at, feeds.metric
-						FROM feeds
-						JOIN users ON feeds.user_id = users.id`)
+	rows, err := DB.Query(`SELECT users.username, users.email, user_info.img_url, feeds.content, feeds.created_at, feeds.metric
+			FROM feeds
+			JOIN users ON feeds.user_id = users.id
+			JOIN user_info ON user_info.email = users.email`)
 	if err != nil {
 		return nil, err
 	}
 
 	for rows.Next() {
 		var post types.Post
-		_ = rows.Scan(&post.Username, &post.Email, &post.Content, &post.Created, &post.Metric)
+		_ = rows.Scan(&post.Username, &post.Email, &post.Img_Url, &post.Content, &post.Created, &post.Metric)
 		postArr = append(postArr, post)
 	}
 	return postArr, nil

@@ -13,6 +13,7 @@ type Message struct {
 }
 
 type Post struct {
+	Img_Url  string
 	Username string
 	Email    string
 	Content  string
@@ -29,4 +30,5 @@ type UserInfo struct {
 	LookingFor    string
 	InstaUsername string
 	Email         string
+	Img_Url       string
 }

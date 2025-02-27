@@ -44,10 +44,10 @@
                 transform: translateY(0);
             }
             40% {
-                transform: translateY(-5px);
+                transform: translateY(-2px);
             }
             60% {
-                transform: translateY(-3px);
+                transform: translateY(-1px);
             }
         }
 
@@ -336,9 +336,11 @@
                 z-index: 1000;
             }
 
-            .profile img {
-                width: 100%;
-                max-width: 200px;
+            .profile .dp {
+                width: 200px;
+                height: 200px;
+                object-fit: cover;
+                border-radius: 5px;
             }
 
             .post-content, .post-footer {
@@ -378,7 +380,7 @@
         </div>
 
         <div class="profile" id="profileSection">
-            <a href="#"><img src="../static/default-avater.jpg" alt="Profile Picture"></a>
+            <img src="{{.userInfo.Img_Url}}" alt="Profile Picture" class="dp">
             <div class="info">
                 <p><strong>{{.user.Username}}</strong> (This is you)</p>
                 <hr>
@@ -413,7 +415,7 @@
                 {{range .feeds}}
                 <div class="post">
                     <div class="post-header">
-                        <img src="../static/default-avater.jpg" alt="Profile Picture" class="post-avatar">
+                        <img src="{{.Img_Url}}" alt="Profile Picture" class="post-avatar">
                         <div class="post-user-info">
                             <span class="post-username">{{.Username}}</span>
                             <span class="post-email">{{.Email}}</span>

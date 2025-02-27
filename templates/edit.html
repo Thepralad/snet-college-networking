@@ -140,10 +140,10 @@
  
         <div class="editPane">
             <h3>Edit Profile</h3>
-            <form action="/editprofile" method="post" class="editProfileForm">
+            <form action="/editprofile" method="post" class="editProfileForm" enctype="multipart/form-data">
                 <div class="formGroup">
-                    <label for="profilephoto">Profile Photo</label>
-                    <input type="file" id="imageUpload" name="image" accept="image/*">
+                    <input type="file" name="image">
+                    <label for="profilephoto">Profile Photo</label> 
                 </div>
                 <div class="formGroup">
                     <label for="username">Username:</label>

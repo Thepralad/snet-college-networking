@@ -102,10 +102,11 @@ func GetUserByUserId(userId int) (*types.User, error) {
 }
 
 func InsertUserInfos(userInfo *types.UserInfo) error {
+	defaultDp := "https://media.istockphoto.com/id/1341046662/vector/picture-profile-icon-human-or-people-sign-and-symbol-for-template-design.jpg?s=612x612&w=0&k=20&c=A7z3OK0fElK3tFntKObma-3a7PyO8_2xxW0jtmjzT78="
 	_, err := DB.Exec(`INSERT INTO user_info(bio, gender, phone, rel_status, top_artist,
-					 looking_for, insta_username, email) values(?, ?, ?, ?, ?, ?, ?, ?)`,
+					 looking_for, insta_username, email, img_url) values(?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 		userInfo.Bio, userInfo.Gender, userInfo.Phone,
-		userInfo.RelStatus, userInfo.TopArtist, userInfo.LookingFor, userInfo.InstaUsername, userInfo.Email)
+		userInfo.RelStatus, userInfo.TopArtist, userInfo.LookingFor, userInfo.InstaUsername, userInfo.Email, defaultDp)
 	if err != nil {
 		return err
 	}
@@ -115,7 +116,7 @@ func InsertUserInfos(userInfo *types.UserInfo) error {
 func GetUserInfo(email string) (*types.UserInfo, error) {
 	var userInfo types.UserInfo
 
-	err := DB.QueryRow("SELECT bio, gender, phone, rel_status, top_artist, looking_for, insta_username FROM user_info WHERE email = ?", email).Scan(&userInfo.Bio, &userInfo.Gender, &userInfo.Phone, &userInfo.RelStatus, &userInfo.TopArtist, &userInfo.LookingFor, &userInfo.InstaUsername)
+	err := DB.QueryRow("SELECT bio, gender, phone, rel_status, top_artist, looking_for, insta_username, img_url FROM user_info WHERE email = ?", email).Scan(&userInfo.Bio, &userInfo.Gender, &userInfo.Phone, &userInfo.RelStatus, &userInfo.TopArtist, &userInfo.LookingFor, &userInfo.InstaUsername, &userInfo.Img_Url)
 	if err != nil {
 		if err.Error() == "sql: no rows in result set" {
 			// Return empty userInfo if no record found
@@ -137,13 +138,14 @@ func GetUserInfo(email string) (*types.UserInfo, error) {
 
 func UpdateUserInfo(userInfo *types.UserInfo, email string) error {
 	_, err := DB.Exec(`UPDATE user_info SET bio = ?, gender = ?, phone = ?, 
-					rel_status = ?, top_artist = ?, looking_for = ?, insta_username = ? 
-					WHERE email = ?`, userInfo.Bio, userInfo.Gender, userInfo.Phone,
+					rel_status = ?, top_artist = ?, looking_for = ?, insta_username = ?,
+					img_url = ? 
+					WHERE email = ?`,
+		userInfo.Bio, userInfo.Gender, userInfo.Phone,
 		userInfo.RelStatus, userInfo.TopArtist, userInfo.LookingFor,
-		userInfo.InstaUsername, email)
+		userInfo.InstaUsername, userInfo.Img_Url, email)
 	if err != nil {
 		return err
 	}
 	return nil
-
 }
