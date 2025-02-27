@@ -36,10 +36,15 @@ func FeedsHandler(res http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 	}
+	pokes, err := models.GetPokes(userId)
+	if err != nil {
+		fmt.Println((err))
+	}
 	render.RenderTemplate(res, "feeds", map[string]interface{}{
 		"user":     user,
 		"feeds":    feeds,
 		"userInfo": userInfo,
+		"pokes":    pokes,
 	})
 }
 

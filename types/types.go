@@ -32,3 +32,8 @@ type UserInfo struct {
 	Email         string
 	Img_Url       string
 }
+type Poke struct {
+	Username string
+	Email    string
+	Img_Url  string
+}
